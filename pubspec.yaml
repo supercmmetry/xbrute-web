@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   get: ^3.4.6
+  dio: ^3.0.10
 
   # Custom fonts
   google_fonts: ^1.1.0

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:xbrute_web/src/controllers/node_controller.dart';
 import 'package:xbrute_web/src/models/task.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 class TaskController extends GetxController {
   RxList<Task> _tasks = List<Task>().obs;
@@ -13,12 +13,12 @@ class TaskController extends GetxController {
 
   Future<List<Task>> _getTasks() async {
     NodeController nodeController = Get.find();
-    var url = nodeController.masterUrl + "/api/v1/tasks/all";
+    var url = "http://" + nodeController.masterUrl + "/api/v1/tasks/all";
     var newTasks = List<Task>();
 
-    final http.Response response = await http.get(url);
+    final Response response = await Dio().get(url);
 
-    var json = jsonDecode(response.body);
+    var json = jsonDecode(response.toString());
     for (final taskJson in json["tasks"]) {
       newTasks.add(Task.fromJson(taskJson));
     }

@@ -9,7 +9,6 @@ class TaskListView extends StatefulWidget {
   _TaskListViewState createState() => _TaskListViewState();
 }
 
-
 class _TaskListViewState extends State<TaskListView> {
   List<Task> items = [];
   TaskController taskController = Get.find();
@@ -22,7 +21,10 @@ class _TaskListViewState extends State<TaskListView> {
         itemCount: items.length,
         itemBuilder: (context, position) {
           var item = items[position];
-          return TaskItem(task: item);
+          return Padding(
+              padding: EdgeInsets.only(
+                  left: 50.0, right: 50.0, top: 10.0, bottom: 10.0),
+              child: TaskItem(task: item));
         });
   }
 }

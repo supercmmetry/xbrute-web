@@ -12,7 +12,6 @@ class HomePage extends StatelessWidget {
     nodeController.masterUrl = "localhost:4444";
 
     TaskController taskController = Get.find();
-    taskController.refresh();
 
     return Scaffold(
       appBar: AppBar(
@@ -23,7 +22,16 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      body: TaskListView(),
+      body: FutureBuilder(
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.connectionState == ConnectionState.none && snapshot.hasData == null) {
+            return Container();
+          }
+
+          return TaskListView();
+        },
+        future: taskController.refresh(),
+      ),
     );
   }
 
