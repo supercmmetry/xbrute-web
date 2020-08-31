@@ -10,6 +10,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     NodeController nodeController = Get.find();
     nodeController.masterUrl = "localhost:4444";
+    nodeController.slaveUrl = "localhost:4444";
 
     TaskController taskController = Get.find();
 
