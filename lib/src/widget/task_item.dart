@@ -8,7 +8,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class TaskItem extends StatelessWidget {
   final Task task;
-  RxBool isActive = false.obs;
+  final RxBool isActive = false.obs;
 
   TaskItem({@required this.task});
 
