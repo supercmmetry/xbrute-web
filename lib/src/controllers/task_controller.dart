@@ -44,4 +44,18 @@ class TaskController extends GetxController {
     }
 
   }
+
+  Future<dynamic> add(Task task) async {
+    NodeController nodeController = Get.find();
+    var url = "http://" + nodeController.slaveUrl + "/api/v1/tasks/add";
+
+    final Response response = await Dio().post(url, data: task.toJson());
+    Map<String, dynamic> json = jsonDecode(response.toString());
+
+    if (json.containsKey("output")) {
+      return json["output"];
+    } else {
+      return json["msg"];
+    }
+  }
 }
