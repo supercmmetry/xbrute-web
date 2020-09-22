@@ -9,6 +9,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 class TaskItem extends StatelessWidget {
   final Task task;
   final RxBool isActive = false.obs;
+  final RxString passwd = "".obs;
 
   TaskItem({@required this.task});
 
@@ -67,6 +68,7 @@ class TaskItem extends StatelessWidget {
                               taskController.execute(task).then((value) {
                                 this.isActive.value = false;
                                 Get.snackbar("Result", value.toString());
+                                this.passwd.value = value.toString();
                               });
                             },
                           ),
@@ -80,7 +82,23 @@ class TaskItem extends StatelessWidget {
                                 type: SpinKitWaveType.start,
                                 size: 30.0,
                               )))
-                        ]))
+                        ])),
+                Obx(
+                  () => Visibility(
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    visible: this.passwd.value != "",
+                    child: Text(
+                      "Key: ${this.passwd.value}",
+                      style: GoogleFonts.comfortaa(
+                        textStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ])),
         ));
   }

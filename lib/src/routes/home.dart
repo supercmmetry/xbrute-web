@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xbrute_web/src/controllers/node_controller.dart';
 import 'package:xbrute_web/src/controllers/task_controller.dart';
+import 'package:xbrute_web/src/models/task.dart';
 import 'package:xbrute_web/src/widget/task_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,6 +35,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildAddDialog(BuildContext context) {
+    TaskController taskController = Get.find();
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(6.0),
@@ -166,7 +169,38 @@ class _HomePageState extends State<HomePage> {
                   style: GoogleFonts.comfortaa(
                     textStyle: TextStyle(fontWeight: FontWeight.bold),
                   )),
-              onPressed: () {},
+              onPressed: () async {
+                var task = Task(
+                  id: 0,
+                  payload: Payload(
+                    start: startController.value.text
+                        .split(" ")
+                        .map((s) => int.parse(s))
+                        .toList(),
+                    prefix: prefixController.value.text
+                        .split(" ")
+                        .map((s) => int.parse(s))
+                        .toList(),
+                    alphabet: alphabetController.value.text
+                        .split(" ")
+                        .map((s) => int.parse(s))
+                        .toList(),
+                    count: int.parse(countController.value.text),
+                  ),
+                  target: targetController.value.text
+                      .split(" ")
+                      .map((s) => int.parse(s))
+                      .toList(),
+                  partialData: partialDataController.value.text
+                      .split(" ")
+                      .map((s) => int.parse(s))
+                      .toList(),
+                  algorithm: algorithm,
+                );
+
+                await taskController.add(task);
+                await taskController.refresh();
+              },
             )
           ],
         ),
