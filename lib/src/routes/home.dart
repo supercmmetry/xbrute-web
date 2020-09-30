@@ -19,6 +19,8 @@ class _HomePageState extends State<HomePage> {
   final targetController = TextEditingController();
   final partialDataController = TextEditingController();
   final countController = TextEditingController();
+  final masterUrlController = TextEditingController();
+  final slaveUrlController = TextEditingController();
 
   String algorithm = 'AES';
 
@@ -208,6 +210,76 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget buildSettingsDialog(BuildContext context) {
+    NodeController nodeController = Get.find();
+
+    masterUrlController.text = nodeController.masterUrl;
+    slaveUrlController.text = nodeController.slaveUrl;
+
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(6.0),
+      ),
+      elevation: 0.0,
+      backgroundColor: Colors.transparent,
+      child: Card(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Settings',
+                style: GoogleFonts.comfortaa(
+                  textStyle: TextStyle(fontWeight: FontWeight.bold),
+                  fontSize: 20.0,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: 300,
+                child: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Master URL',
+                  ),
+                  controller: masterUrlController,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: 300,
+                child: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Slave URL',
+                  ),
+                  controller: slaveUrlController,
+                ),
+              ),
+            ),
+            FlatButton(
+              textColor: Colors.blueAccent,
+              child: Text("SAVE",
+                  style: GoogleFonts.comfortaa(
+                    textStyle: TextStyle(fontWeight: FontWeight.bold),
+                  )),
+              onPressed: () {
+                nodeController.masterUrl = masterUrlController.value.text;
+                nodeController.slaveUrl = slaveUrlController.value.text;
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     NodeController nodeController = Get.find();
@@ -215,6 +287,7 @@ class _HomePageState extends State<HomePage> {
     nodeController.slaveUrl = "localhost:4444";
 
     TaskController taskController = Get.find();
+    taskController.refresh();
 
     return Scaffold(
       appBar: AppBar(
@@ -227,6 +300,14 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Spacer(),
+            IconButton(
+              icon: Icon(Icons.refresh_rounded),
+              tooltip: "Refresh",
+              splashRadius: 30.0,
+              onPressed: () async {
+                await taskController.refresh();
+              },
+            ),
             IconButton(
               icon: Icon(Icons.add),
               tooltip: "Add a task",
@@ -242,22 +323,17 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.settings),
               tooltip: "Settings",
               splashRadius: 30.0,
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: buildSettingsDialog,
+                );
+              },
             ),
           ],
         ),
       ),
-      body: FutureBuilder(
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.connectionState == ConnectionState.none &&
-              snapshot.hasData == null) {
-            return Container();
-          }
-
-          return TaskListView();
-        },
-        future: taskController.refresh(),
-      ),
+      body: TaskListView()
     );
   }
 }
