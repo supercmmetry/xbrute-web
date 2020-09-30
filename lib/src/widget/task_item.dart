@@ -88,9 +88,11 @@ class TaskItem extends StatelessWidget {
                     maintainSize: true,
                     maintainAnimation: true,
                     maintainState: true,
-                    visible: this.passwd.value != "",
+                    visible: this.passwd.value != "" ||
+                        task.solution.length > 0,
                     child: Text(
-                      "Key: ${this.passwd.value}",
+                      "Key: ${task.solution.length > 0 ? task.solution :
+                      this.passwd.value}",
                       style: GoogleFonts.comfortaa(
                         textStyle: TextStyle(
                           fontWeight: FontWeight.bold,

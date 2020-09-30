@@ -3,6 +3,7 @@ class Task {
     this.id,
     this.payload,
     this.target,
+    this.solution,
     this.partialData,
     this.algorithm,
   });
@@ -10,6 +11,7 @@ class Task {
   int id;
   Payload payload;
   List<int> target;
+  List<int> solution;
   List<int> partialData;
   String algorithm;
 
@@ -17,6 +19,7 @@ class Task {
     id: json["id"],
     payload: Payload.fromJson(json["payload"]),
     target: List<int>.from(json["target"].map((x) => x)),
+    solution: List<int>.from(json["solution"].map((x) => x)),
     partialData: List<int>.from(json["partial_data"].map((x) => x)),
     algorithm: json["algorithm"],
   );

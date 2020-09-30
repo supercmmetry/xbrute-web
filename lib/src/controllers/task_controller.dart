@@ -38,6 +38,13 @@ class TaskController extends GetxController {
     Map<String, dynamic> json = jsonDecode(response.toString());
 
     if (json.containsKey("output")) {
+      var url = "http://" + nodeController.masterUrl + "/api/v1/tasks/feed";
+
+      await Dio().post(url, data: {
+        "id": task.id,
+        "output": json["output"]
+      });
+
       return json["output"];
     } else {
       return json["msg"];
